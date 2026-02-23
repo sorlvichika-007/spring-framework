@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004 Create Cart
+      author: Sorl Vichika
+      created: 17 Feb 2026
+      comment: This is create cart
+      changes:
+        - createTable:
+            tableName: carts
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  defaultValueComputed: "(uuid_to_bin(uuid()))"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: date_created
+                  type: date
+                  defaultValueComputed: "(curdate())"
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 005 Create Cart Item
+      author: Sorl Vichika
+      created: 17 Feb 2026 22:17
+      comment: This is create cart item
+      changes:
+        - createTable:
+            tableName: cart_items
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: cart_id
+                  type: binary(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: int
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: cart_items
+            columnNames: cart_id , product_id
+            constraintName: cart_items_cart_product_unique
+
+        - addForeignKeyConstraint:
+            baseTableName: cart_items
+            baseColumnNames: cart_id
+            referencedTableName: carts
+            referencedColumnNames: id
+            constraintName: cart_items_carts_id_fk
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: cart_items
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            constraintName: cart_items_products_id_fk
+            onDelete: CASCADE

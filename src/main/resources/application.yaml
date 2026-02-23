@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: Science
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring
+    username: root
+    password: Str0ngP@ssw0rd!
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  liquibase:
+    change-log: db/changelog/db.changelog-master.yaml
+  jwt:
+    secret: ${SECRET_KEY}
+    expirationAccess: 400
+    expirationRefresh: 604800
