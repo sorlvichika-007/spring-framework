@@ -11,6 +11,8 @@ import com.testing.science.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -33,6 +35,21 @@ public class ProductServiceImpl implements ProductService {
         productMapper.updateProduct(dto,product);
         product.setCategory(category);
         return productMapper.toDto(productRepository.save(product));
+    }
+
+    @Override
+    public List<ProductDto> getAllProduct() {
+        return productRepository.findAll()
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public ProductDto getById(Long id) {
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return productMapper.toDto(product);
     }
 
     private Product getId(Long id){
